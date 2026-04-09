@@ -64,6 +64,7 @@ git clone -b md https://github.com/lijigang/ljg-skills.git ~/.claude/plugins/ljg
 | **ljg-paper-river** | 论文溯源 — 倒读法，递归挖前序论文（最多5层）+ 最新进展，从源头讲述问题演化史 |
 | **ljg-plain** | 白话引擎 — 把任何内容改写到聪明的十二岁小孩也能懂 |
 | **ljg-rank** | 降秩引擎 — 给一个领域，找出背后不可再少的独立生成器 |
+| **ljg-think** | 追本之箭 — 给一个观点或现象，纵向深钻到不可再分的本质 |
 | **ljg-word** | 单词精通 — 深度拆解一个英语单词的核心语义和顿悟时刻 |
 | **ljg-writes** | 写作引擎 — 带着一个观点出发，在写的过程中把它想透 |
 | **ljg-invest** | 投资分析 — 核心判断项目是否是一台「秩序创造机器」 |
