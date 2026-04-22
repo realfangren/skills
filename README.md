@@ -73,6 +73,7 @@ git clone -b md https://github.com/lijigang/ljg-skills.git ~/.claude/plugins/ljg
 | **ljg-roundtable** | 圆桌讨论 — 求真导向的结构化多人辩证对话，每轮生成 ASCII 思考框架图 |
 | **ljg-travel** | 旅行研究 — 输入城市名，生成深度文化研究文档（org-mode）+ 便携卡片（PNG） |
 | **ljg-skill-map** | 技能地图 — 扫描所有已安装技能，渲染可视化总览 |
+| **ljg-present** | 高桥流演示 — 把文本的思想提炼成节拍，一页一个关键词，字撑满屏，浏览器全屏即开讲 |
 
 
 ## 工作流
