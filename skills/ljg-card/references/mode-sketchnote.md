@@ -223,12 +223,15 @@ Read `assets/sketchnote_template.html`
 ```
 
 **实现要点**：
-- 用 **CSS Grid 命名区域**（`grid-template-areas`）排卡片，宽度 `1080 - 60×2 = 960` 内
-- 中央 `.core` 卡跨多列（如 `grid-column: span 2`）
+- **卡片宽度由内容决定**——不固定列数，不强制对齐。信息量大的卡自然宽，信息少的自然窄
+- 推荐用 **flex + flex-wrap** 或 **grid + auto/min-content**——而非 `repeat(N, 1fr)` 这种等分写法
+- 通过 `min-width` / `max-width` 给每张卡指定"权重区间"——内容多的 max-width 大，内容少的 max-width 小
+- 中央 `.core` 是最大最宽的那张（信息密度最高），通常 `min-width: 600px`
 - 卡片之间留 `gap: 16-24px`——既有呼吸又紧凑
+- 整体宽度尽量贴 `1080 - 60×2 = 960`，但允许某行不顶满（错落感来自此）
 - 整体高度自适应——内容驱动
 - 箭头 `<svg class="relations">` 定位在卡片网格之上（`z-index: 50`），坐标根据卡片实际位置标
-- **避免三等分等宽 + 居中 hero**——卡片大小本身就要错落（按内容信息量决定，不按对称美观决定）
+- **严禁三等分等宽 + 居中 hero**——卡片大小本身就要错落（按内容信息量决定，不按对称美观决定）
 
 ---
 
@@ -236,7 +239,7 @@ Read `assets/sketchnote_template.html`
 
 把全部 CSS 写入 `{{CUSTOM_CSS}}`，全部 HTML（包括 `.title-block`、卡片网格、`.relations` SVG、`.relation-label`）写入 `{{CONTENT_HTML}}`。
 
-**CSS 模式**：
+**CSS 模式**（推荐 flex + 内容驱动宽度，禁止 `repeat(N, 1fr)`）：
 
 ```css
 /* {{CUSTOM_CSS}} */
@@ -246,21 +249,30 @@ Read `assets/sketchnote_template.html`
 .grid {
   position: relative;
   padding: 0 60px;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-areas:
-    "a a b b b c"
-    "core core core core d d"
-    "core core core core d d"
-    "e e f f g g";
+  display: flex;
+  flex-wrap: wrap;
   gap: 18px;
+  align-items: flex-start;
 }
-.area-a    { grid-area: a; }
-.area-b    { grid-area: b; }
-.area-c    { grid-area: c; }
-.area-core { grid-area: core; }
-/* … */
+
+/* 卡片基础：宽度由内容驱动，min/max-width 给"权重区间" */
+.card {
+  flex: 0 1 auto;
+  min-width: 240px;
+  max-width: 480px;
+}
+
+/* 单独给每张卡微调权重——信息多的放宽 max-width，少的收窄 */
+.card.core    { min-width: 600px; max-width: 720px; flex-basis: 60%; }
+.card.compact { max-width: 260px; }    /* 内容少的卡 */
+.card.wide    { max-width: 560px; }    /* 内容稍多的卡 */
 ```
+
+**布局补充**：
+- 不用 `grid-template-areas`——它会强行拉伸卡片到列宽。改用 flex 自然换行
+- 卡片排列顺序在 HTML 中决定——希望 .core 出现在视觉中心时，把它放在第 4-5 个位置
+- 想让某张卡换行单独占一行？给它 `flex-basis: 100%` 或前面插 `<div style="flex-basis:100%"></div>` 强制断行
+- 如果对错落感要求更高：可以分多个 `.row` flex 容器，每行自己换行
 
 **变量替换**：
 
@@ -286,6 +298,7 @@ Read `assets/sketchnote_template.html`
 - [ ] 主标题是否 80+px 粗黑、左对齐？副标题灰色 26-28px？
 - [ ] 卡片字号是否：分类 22px / 概念名 36-44px / 正文 22-23px？
 - [ ] 是否避免了"三等分等宽卡片"和"居中 hero 标题"？
+- [ ] 卡片宽度是否**由内容决定**——信息多的宽、信息少的窄？还是被 `1fr` / 等分列硬拉成同宽？
 - [ ] SVG 图示是否每张都不超过 6 个 path、风格简笔统一？
 - [ ] 是否避免了点阵底纹（旧版残留）？背景应是平静米白 + 极淡纸张噪点
 - [ ] 中文是否优雅显示？（手写字体 fallback 到楷体，无方块字）
